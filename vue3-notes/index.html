@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Vue 3 Notes</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="http://fonts.cdnfonts.com/css/graphik">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="wrapper">
+        <div
+            class="app"
+            id="app"
+            v-cloak
+        >
+            <transition name="fade">
+                <div
+                    class="app__wrapper"
+                    v-if="isInited"
+                >
+                    <aside class="app__aside">
+                        <a
+                            class="app__settings"
+                            id="settings"
+                            href="#"
+                            @click.prevent.stop="onSettingsToggle"
+                        ></a>
+                        <transition name="fade">
+                            <form
+                                class="app__controls"
+                                id="controls"
+                                v-if="isSettingsActive"
+                                @submit.prevent
+                                @click.stop
+                            >
+                                <a
+                                    class="app__close"
+                                    href="#"
+                                ></a>
+                                <h3 class="app__subtitle">Настройки</h3>
+                                <div class="app__control">
+                                    <label
+                                        class="app__label"
+                                        for="enable-edit"
+                                    >
+                                        Режим редактирования
+                                    </label>
+                                    <div class="app__switcher switcher">
+                                        <input
+                                            class="switcher__input"
+                                            id="enable-edit"
+                                            type="checkbox"
+                                            v-model="settings.enableEdit"
+                                        />
+                                        <label
+                                            class="switcher__label"
+                                            for="enable-edit"
+                                        ></label>
+                                    </div>
+                                </div>
+                                <div class="app__notice">
+                                    Показать иконки для редактирования и удаления заметок.
+                                </div>
+                                <div class="app__control">
+                                    <label
+                                        class="app__label"
+                                        for="enable-click-edit"
+                                    >
+                                        Редактирование по клику
+                                    </label>
+                                    <div class="app__switcher switcher">
+                                        <input
+                                            class="switcher__input"
+                                            id="enable-click-edit"
+                                            type="checkbox"
+                                            v-model="settings.enableClickEdit"
+                                        />
+                                        <label
+                                            class="switcher__label"
+                                            for="enable-click-edit"
+                                        ></label>
+                                    </div>
+                                </div>
+                                <div class="app__notice">
+                                    Активировать редактирование заметок по клику на них.
+                                </div>
+                                <div class="app__control">
+                                    <label
+                                        class="app__label"
+                                        for="reverse-ordering"
+                                    >
+                                        Сортировать по дате
+                                    </label>
+                                    <div class="app__switcher switcher">
+                                        <input
+                                            class="switcher__input"
+                                            id="reverse-ordering"
+                                            type="checkbox"
+                                            v-model="settings.orderByDate"
+                                        />
+                                        <label
+                                            class="switcher__label"
+                                            for="reverse-ordering"
+                                        ></label>
+                                    </div>
+                                </div>
+                                <div class="app__notice">
+                                    Сортировать список заметок по дате (от старых к новым).
+                                </div>
+                                <div class="app__control">
+                                    <label
+                                        class="app__label"
+                                        for="enable-dark-mode"
+                                    >
+                                        Темная тема
+                                    </label>
+                                    <div class="app__switcher switcher">
+                                        <input
+                                            class="switcher__input"
+                                            id="enable-dark-mode"
+                                            type="checkbox"
+                                            v-model="settings.darkMode"
+                                        />
+                                        <label
+                                            class="switcher__label"
+                                            for="enable-dark-mode"
+                                        ></label>
+                                    </div>
+                                </div>
+                                <div class="app__control app__control--button">
+                                    <button
+                                        type="submit"
+                                        @click="onLocalStorageReset"
+                                    >
+                                        Сбросить кеш
+                                    </button>
+                                </div>
+                            </form>
+                        </transition>
+                    </aside>
+                    <main class="app__main">
+                        <div class="app__header">
+                            <div class="app__logo"></div>
+                            <h1 class="app__title">{{ title }}</h1>
+                            <div class="app__notice">Для сохранения заметки нажмите на кнопку «Сохранить» <br/>или комбинацию клавиш Ctrl+Enter (Windows) либо ⌘⇧R (Mac).</div>
+                            <form
+                                class="app__form"
+                                @submit.prevent="onSubmit"
+                                @keydown="onCreateKeydown"
+                            >
+                                <div class="form__control">
+                                    <textarea
+                                        required
+                                        class="form__textarea"
+                                        v-model="textarea.value"
+                                        :placeholder="textarea.placeholder"
+                                    ></textarea>
+                                </div>
+                                <button
+                                    type="submit"
+                                    class="form__button"
+                                    :disabled="!textarea.value"
+                                >
+                                    Сохранить
+                                </button>
+                            </form>
+                        </div>
+                        <div class="app__content">
+                            <h2 class="app__subtitle">Список заметок</h2>
+                            <div
+                                class="app__notes"
+                                v-if="orderedNotes.length"
+                            >
+                                <div
+                                    class="app__note note"
+                                    v-for="(note, i) in orderedNotes"
+                                    :key="note.id"
+                                >
+                                    <transition name="fade">
+                                        <div
+                                            class="note__actions"
+                                            v-if="settings.enableEdit"
+                                        >
+                                            <a
+                                                class="note__action note__action--edit"
+                                                href="#"
+                                                v-if="editor.id !== note.id"
+                                                @click.prevent.stop="onEdit(note.id)"
+                                            ></a>
+                                            <a
+                                                class="note__action note__action--save"
+                                                :class="editor.text === note.text ? 'is-disabled' : ''"
+                                                href="#"
+                                                v-if="editor.id === note.id"
+                                                @click.prevent="onSave(note.id)"
+                                            ></a>
+                                            <a
+                                                class="note__action note__action--remove"
+                                                href="#"
+                                                @click.prevent="onRemove(note.id)"
+                                            ></a>
+                                        </div>
+                                    </transition>
+                                    <div
+                                        class="note__content"
+                                        v-if="editor.id !== note.id"
+                                        @click.stop="onNoteClick(note.id)"
+                                    >
+                                        <h3 class="note__title">{{ note.title }}</h3>
+                                        <div class="note__date">{{ note.date }}</div>
+                                        <div class="note__text">{{ note.text }}</div>
+                                    </div>
+                                    <form
+                                        class="note__editor editor"
+                                        v-else
+                                        @submit.prevent
+                                        @keydown="onEditKeydown($event, note.id)"
+                                    >
+                                        <h3 class="editor__title">{{ note.title }}</h3>
+                                        <div class="editor__text">Для сохранения заметки нажмите на иконку или комбинацию клавиш Ctrl+Enter (Windows) либо ⌘⇧R (Mac).</div>
+                                        <div class="editor__control">
+                                            <textarea
+                                                type="text"
+                                                class="editor__input"
+                                                required
+                                                v-model="editor.text"
+                                                @click.stop
+                                            ></textarea>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div
+                                class="app__empty"
+                                v-else
+                            >
+                                <h3>Список заметок пуст</h3>
+                                <p>Для генерации заметок сбросьте кеш в настройках приложения <br/>или <a href="#" @click.prevent="reload">обновите страницу</a></p>
+                            </div>
+                        </div>
+                        <div class="app__footer">
+                            <div class="app__copyright">
+                                <p class="app__course">Подготовлено для курса «<a target="_blank" href="https://tocode.ru/courses/vuejs-3-s-nulya-do-rezultata/">Курс по Vue.js 3. С нуля до результата»</a></p>
+                                <p class="app__dev"><a target="_blank" href="https://github.com/digikid">@digikid</a> &copy 2021</p>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            </transition>
+        </div>
+    </div>
+
+    <!-- JS -->
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="app.js"></script>
+</body>
+</html>

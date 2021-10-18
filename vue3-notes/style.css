@@ -1,0 +1,508 @@
+/* Main */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    position: relative;
+    font-size: 16px;
+    line-height: 1.35;
+    color: #2c2c2c;
+    background-color: #f3f3f3;
+    font-family: Graphik, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Apple Color Emoji, Arial, sans-serif, Segoe UI Emoji, Segoe UI Symbol;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    fill: currentcolor;
+    transition: background-color .3s ease-in-out, color .3s ease-in-out;
+}
+
+body.dark-mode {
+    color: #fff;
+    background-color: #182137;
+}
+
+a {
+    color: #da7600;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+input,
+textarea,
+button {
+    font-size: 18px;
+    appearance: none;
+    border: 0;
+    border-radius: 6px;
+    outline: 0;
+    padding: 0.75em 1em;
+}
+
+input,
+textarea {
+    width: 100%;
+    display: block;
+    background-color: #fff;
+    border: 2px solid #f3f3f3;
+    transition: border-color .15s ease-in-out, background-color .15s ease-in-out;
+}
+
+.dark-mode input,
+.dark-mode textarea {
+    background-color: #dee6f9;
+    border-color: #dee6f9;
+}
+
+input:focus,
+textarea:focus {
+    border-color: #f8a500;
+}
+
+textarea {
+    min-height: 15rem;
+}
+
+button {
+    display: inline-block;
+    min-width: 200px;
+    color: #000;
+    font-weight: 500;
+    background-color: #f9a400;
+    margin-top: 1.5em;
+    cursor: pointer;
+    transition: background-color .15s ease-in-out;
+}
+
+.dark-mode button {
+    background-color: #f9a400;
+}
+
+button[disabled] {
+    background-color: rgba(160, 160, 160, .36);
+    pointer-events: none;
+}
+
+.dark-mode button[disabled] {
+    background-color: rgba(230, 230, 230, .25);
+}
+
+h2,
+h3 {
+    margin-top: 0;
+}
+
+h1 {
+    font-size: 4em;
+    margin-top: 0;
+}
+
+h2 {
+    font-size: 2.5em;
+}
+
+h3 {
+    font-size: 1.5em;
+}
+
+/* Intro animation */
+
+@keyframes spinner {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+[v-cloak] {
+    display: block;
+    padding: 50px 0;
+}
+
+[v-cloak] > * {
+    display: none;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity .3s ease !important;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0 !important;
+}
+
+/* Wrapper */
+
+.wrapper {
+    width: 800px;
+    max-width: 100%;
+    padding: 40px 15px;
+    margin: 0 auto;
+}
+
+/* App */
+
+.app__header {
+    text-align: center;
+    margin-bottom: 3em;
+}
+
+.app__logo {
+    font-size: 6em;
+    line-height: 1;
+}
+
+.app__logo:before {
+    content: '\270D';
+}
+
+.app__title {
+    font-weight: 800;
+    margin-bottom: .25em;
+    transition: color .15s ease-in-out;
+}
+
+.dark-mode .app__title {
+    color: #f3a309;
+}
+
+.app__subtitle {
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: .25em;
+}
+
+.app__notice {
+    font-size: 90%;
+    line-height: 1.5;
+    opacity: .5;
+    margin-bottom: 1.75em;
+}
+
+.app__form {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.app__controls {
+    position: fixed;
+    top: 2em;
+    right: 1.5em;
+    width: 320px;
+    max-width: calc(100% - 3em);
+    background-color: #e1e1e1;
+    border-radius: 6px;
+    padding: 1em 1.5em;
+    z-index: 2;
+    transition: background-color .3s ease-in-out, color .3s ease-in-out;
+}
+
+.dark-mode .app__controls {
+    background-color: #151e31;
+}
+
+.app__controls .app__notice {
+    font-size: 80%;
+    line-height: 1.25;
+    margin: 0;
+}
+
+.app__controls h3 {
+    text-align: left;
+    margin-bottom: 1em;
+}
+
+.app__control {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1em;
+}
+
+.app__control:last-child {
+    margin-bottom: 0;
+}
+
+.app__control--button {
+    margin-top: -1em;
+}
+
+.app__control button {
+    width: 100%;
+    font-size: 1em;
+    margin-bottom: 0.5em;
+}
+
+.app__control + .app__notice {
+    margin-top: -.5em;
+    margin-bottom: 1em;
+}
+
+.app__label + .app__switcher {
+    margin-left: 1em;
+}
+
+.app__settings {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 1em;
+    right: 1em;
+    width: 2em;
+    height: 2em;
+    font-size: 2em;
+    line-height: 1;
+    text-decoration: none !important;
+    z-index: 3;
+}
+
+.app__settings:before {
+    content: '\2699';
+}
+
+.app__notes,
+.app__empty {
+    margin-top: 2em;
+}
+
+.app__empty {
+    position: relative;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 6px;
+    padding: 1.5em 2em;
+    margin-bottom: 1.75em;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.dark-mode .app__empty {
+    background-color: rgba(255, 255, 255, .1);
+}
+
+.app__empty h3 {
+    margin-bottom: .5em;
+}
+
+.app__empty p {
+    font-size: 90%;
+    margin-bottom: 0.5em;
+}
+
+.app__footer {
+    text-align: center;
+    font-size: 80%;
+}
+
+.app__footer p {
+    line-height: 1.5;
+    color: #999;
+}
+
+.app__dev {
+    margin-top: 3px;
+}
+
+/* Switcher */
+
+.switcher {
+    position: relative;
+    display: inline-block;
+}
+
+.switcher__input {
+    display: none;
+}
+
+.switcher__label {
+    display: block;
+    width: 48px;
+    height: 24px;
+    text-indent: -150%;
+    clip: rect(0 0 0 0);
+    color: transparent;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.switcher__label:before,
+.switcher__label:after {
+    content: "";
+    display: block;
+    position: absolute;
+    cursor: pointer;
+}
+
+.switcher__label:before {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    border-radius: 9999em;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.dark-mode .switcher__label:before {
+    background-color: #dedede;
+}
+
+.switcher__label:after {
+    top: 0;
+    left: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.45);
+    transition: left 0.25s ease;
+}
+
+.switcher__input:checked + .switcher__label:before {
+    background-color: #89c12d;
+}
+
+.switcher__input:checked + .switcher__label:after {
+    left: 24px;
+}
+
+/* Note */
+
+.note {
+    position: relative;
+    background-color: #fff;
+    border-radius: 6px;
+    padding: 1.5em 2em;
+    margin-bottom: 1.75em;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.dark-mode .note {
+    background-color: rgba(255, 255, 255, .1);
+}
+
+.note__title {
+    margin-top: 0;
+    margin-bottom: .25em;
+}
+
+.note__date {
+    font-size: 80%;
+    opacity: 0.4;
+    margin-bottom: .75em;
+}
+
+.note__actions {
+    position: absolute;
+    top: 1.5em;
+    right: 1.5em;
+}
+
+.note__action {
+    display: inline-block;
+    font-size: 1.15em;
+    margin-right: .75em;
+    text-decoration: none !important;
+    cursor: pointer;
+    transition: opacity .15s ease-in-out;
+}
+
+.note__action:last-child {
+    margin-right: 0;
+}
+
+.note__action.is-disabled {
+    opacity: .4;
+    pointer-events: none;
+}
+
+.note__action--remove:before {
+    content: '\274C';
+}
+
+.note__action--edit:before {
+    content: '\270F';
+}
+
+.note__action--save:before {
+    content: '\1F4BE';
+}
+
+.note__editor {
+    margin-bottom: 1em;
+}
+
+/* Editor */
+
+.editor__title {
+    margin-bottom: .25em;
+}
+
+.editor__text {
+    opacity: .6;
+    margin-bottom: 1.5em;
+}
+
+.editor__control {
+    margin-bottom: 1em;
+}
+
+.editor__control:last-child {
+    margin-bottom: 0;
+}
+
+.editor__label {
+    display: block;
+    font-size: 90%;
+    opacity: .6;
+    margin-bottom: 0.5em;
+}
+
+/* Media */
+
+@media screen and (max-width: 767px) {
+    h1 {
+        font-size: 10vw;
+    }
+
+    h2 {
+        font-size: 8.5vw;
+    }
+
+    h3 {
+        font-size: 7vw;
+    }
+
+    .app__logo {
+        font-size: 20vw;
+    }
+
+    .app__form {
+        width: 100%;
+    }
+
+    .app__settings {
+        top: 0;
+        right: 0;
+        width: 2em;
+        height: 2em;
+    }
+
+    .editor__text {
+        font-size: 0.9em;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .app__label {
+        font-size: 4vw;
+    }
+}
