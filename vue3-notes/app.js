@@ -39,7 +39,7 @@ const getNotes = (count = 5) => {
     });
 };
 
-const isCmdEnter = e => (e.ctrlKey || e.metaKey) && event.keyCode == 13;
+const isCmdEnter = e => (e.ctrlKey || e.metaKey) && e.keyCode == 13;
 
 const App = {
     data() {
